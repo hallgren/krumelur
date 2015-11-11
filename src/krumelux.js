@@ -8,29 +8,29 @@ var convertHTML = require('html-to-vdom')({
     VText: VText
 });
 
-var vTrees = {};
-
 var Krumelux = {
-  version: "0.0.1"
+  version: "0.0.1",
+  vTrees: {}
 };
 
 Krumelux.initialize = function(element) {
   var vTree = convertHTML(element.innerHTML.trim());
-  vTrees[element.id] = vTree;
+  Krumelux.vTrees[element.id] = vTree;
+  console.log(Krumelux.vTrees);
 };
 
 Krumelux.applyDiff = function(replacementElement, targetElement) {
   var replacementVtree = convertHTML(replacementElement.innerHTML.trim());
-  var patches = diff(vTrees[targetElement.id], replacementVtree);
+  var patches = diff(Krumelux.vTrees[targetElement.id], replacementVtree);
   targetElement = patch(targetElement, patches);
-  vTrees[targetElement.id] = replacementVtree;
+  Krumelux.vTrees[targetElement.id] = replacementVtree;
 };
 
 Krumelux.applyDiffFromHTMLString = function(htmlString, targetElement) {
-    var replacementVtree = convertHTML(htmlString.trim());
-    var patches = diff(vTrees[targetElement.id], replacementVtree);
-    targetElement = patch(targetElement, patches);
-    vTrees[targetElement.id] = replacementVtree;
-  };
+  var replacementVtree = convertHTML(htmlString.trim());
+  var patches = diff(Krumelux.vTrees[targetElement.id], replacementVtree);
+  targetElement = patch(targetElement, patches);
+  Krumelux.vTrees[targetElement.id] = replacementVtree;
+};
 
-module.exports = global.Krumelux = Krumelux;
+module.exports = global.Krumelux = Krumelux

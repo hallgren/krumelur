@@ -24,6 +24,6 @@
     "html-to-vdom ": ""
   },
   "devDependencies": {
-    "webpack": ""
+    "browserify": ""
   }
 }
