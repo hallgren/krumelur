@@ -16,7 +16,6 @@ var Krumelux = {
 Krumelux.initialize = function(element) {
   var vTree = convertHTML(element.innerHTML.trim());
   Krumelux.vTrees[element.id] = vTree;
-  console.log(Krumelux.vTrees);
 };
 
 Krumelux.applyDiff = function(replacementElement, targetElement) {
