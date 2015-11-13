@@ -53,8 +53,9 @@
         };
 
         window.onload = function(){
-            Krumelux.initialize(document.body)
-            bindLink()
+            var body = document.getElementById("body");
+            Krumelux.initialize(body);
+            bindLink();
         };
 
         

@@ -14,6 +14,8 @@ var Krumelux = {
 };
 
 Krumelux.initialize = function(element) {
+  if (!element.id) { throw "Krumelux.initialize: element most have id defined"; }
+  
   var vTree = convertHTML(element.innerHTML.trim());
   Krumelux.vTrees[element.id] = vTree;
 };
