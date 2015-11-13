@@ -16,15 +16,8 @@ var Krumelux = {
 Krumelux.initialize = function(element) {
   if (!element.id) { throw "Krumelux.initialize: element most have id defined"; }
   
-  var vTree = convertHTML(element.innerHTML.trim());
+  var vTree = convertHTML(element.outerHTML.trim());
   Krumelux.vTrees[element.id] = vTree;
-};
-
-Krumelux.applyDiff = function(replacementElement, targetElement) {
-  var replacementVtree = convertHTML(replacementElement.innerHTML.trim());
-  var patches = diff(Krumelux.vTrees[targetElement.id], replacementVtree);
-  targetElement = patch(targetElement, patches);
-  Krumelux.vTrees[targetElement.id] = replacementVtree;
 };
 
 Krumelux.applyDiffFromHTMLString = function(htmlString, targetElement) {

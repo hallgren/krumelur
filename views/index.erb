@@ -18,8 +18,8 @@
                 if (xhr.status === OK) {
                   unbindLink();
 
-                  var body = document.getElementById("body");
-                  Krumelux.applyDiffFromHTMLString(xhr.responseText, body);
+                  var element = document.getElementById("body");
+                  Krumelux.applyDiffFromHTMLString(xhr.responseText, element);
                   
                   bindLink();
                 } else {
@@ -53,8 +53,8 @@
         };
 
         window.onload = function(){
-            var body = document.getElementById("body");
-            Krumelux.initialize(body);
+            var element = document.getElementById("body");
+            Krumelux.initialize(element);
             bindLink();
         };
 
@@ -62,7 +62,5 @@
     </script>
 
 </head>
-    <body id="body">
-        <%= erb :body %>
-    </body>
+    <%= erb :body %>
 </html>
