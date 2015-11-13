@@ -1,5 +1,9 @@
 require "sinatra"
 
 get "/" do
-  erb :index
+  if request.xhr?
+    erb :body
+  else
+    erb :index
+  end
 end
