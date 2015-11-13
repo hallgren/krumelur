@@ -7979,15 +7979,6 @@ Krumelux.applyDiffFromHTMLString = function(htmlString, targetElement) {
   Krumelux.vTrees[targetElement.id] = replacementVtree;
 };
 
-// Krumelux.applyDiff = function(replacementElement, targetElement) {
-//   var replacementVtree = convertHTML(replacementElement.innerHTML.trim());
-//   var patches = diff(Krumelux.vTrees[targetElement.id], replacementVtree);
-//   targetElement = patch(targetElement, patches);
-//   Krumelux.vTrees[targetElement.id] = replacementVtree;
-// };
-
-
-
 module.exports = global.Krumelux = Krumelux
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
