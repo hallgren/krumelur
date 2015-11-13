@@ -15,9 +15,7 @@ var Krumelux = {
 
 Krumelux.initialize = function(element) {
   if (!element.id) { throw "Krumelux.initialize: element most have id defined"; }
-  
-  var vTree = convertHTML(element.outerHTML.trim());
-  Krumelux.vTrees[element.id] = vTree;
+  Krumelux.vTrees[element.id] = convertHTML(element.outerHTML.trim());
 };
 
 Krumelux.applyDiffFromHTMLString = function(htmlString, targetElement) {
