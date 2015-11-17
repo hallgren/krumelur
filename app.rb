@@ -1,4 +1,5 @@
 require "sinatra"
+use Rack::Deflater
 
 get "/" do
   if request.xhr?
