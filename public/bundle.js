@@ -7960,24 +7960,24 @@ var convertHTML = require('html-to-vdom')({
     VText: VText
 });
 
-var Krumelux = {
+var Krumelur = {
   version: "0.0.1",
   vTrees: {}
 };
 
-Krumelux.initialize = function(element) {
-  if (!element.id) { throw "Krumelux.initialize: element most have id defined"; }
-  Krumelux.vTrees[element.id] = convertHTML(element.outerHTML.trim());
+Krumelur.initialize = function(element) {
+  if (!element.id) { throw "Krumelur.initialize: element most have id defined"; }
+  Krumelur.vTrees[element.id] = convertHTML(element.outerHTML.trim());
 };
 
-Krumelux.applyDiffFromHTMLString = function(htmlString, targetElement) {
+Krumelur.applyDiffFromHTMLString = function(htmlString, targetElement) {
   var replacementVtree = convertHTML(htmlString.trim());
-  var patches = diff(Krumelux.vTrees[targetElement.id], replacementVtree);
+  var patches = diff(Krumelur.vTrees[targetElement.id], replacementVtree);
   targetElement = patch(targetElement, patches);
-  Krumelux.vTrees[targetElement.id] = replacementVtree;
+  Krumelur.vTrees[targetElement.id] = replacementVtree;
 };
 
-module.exports = global.Krumelux = Krumelux
+module.exports = global.Krumelur = Krumelur
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"html-to-vdom":1,"virtual-dom/diff":45,"virtual-dom/patch":49,"virtual-dom/vnode/vnode":63,"virtual-dom/vnode/vtext":65}],69:[function(require,module,exports){

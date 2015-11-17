@@ -19,7 +19,7 @@
                   unbindLink();
 
                   var element = document.getElementById("body");
-                  Krumelux.applyDiffFromHTMLString(xhr.responseText, element);
+                  Krumelur.applyDiffFromHTMLString(xhr.responseText, element);
                   
                   bindLink();
                 } else {
@@ -54,7 +54,7 @@
 
         window.onload = function(){
             var element = document.getElementById("body");
-            Krumelux.initialize(element);
+            Krumelur.initialize(element);
             bindLink();
         };
 

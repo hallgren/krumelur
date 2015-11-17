@@ -1,14 +1,14 @@
 {
-  "name": "krumelux",
+  "name": "krumelur",
   "version": "0.0.1",
   "description": "This is a mix of Virtual-DOM, HTML-TO-VDOM, that applies DOM \"diffs\" without any server configuration—it just needs plain old HTML.",
-  "main": "./public/dist/krumelux.js",
+  "main": "./public/dist/krumelur.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/hallgren/krumelux.git"
+    "url": "https://github.com/hallgren/krumelur.git"
   },
   "keywords": [
     "virtual-dom"
@@ -16,9 +16,9 @@
   "author": "Morgan Hallgren <morgan.hallgren@gmail.com>",
   "license": "Apache",
   "bugs": {
-    "url": "https://github.com/hallgren/krumelux/issues"
+    "url": "https://github.com/hallgren/krumelur/issues"
   },
-  "homepage": "https://github.com/hallgren/krumelux",
+  "homepage": "https://github.com/hallgren/krumelur",
   "dependencies": {
     "virtual-dom": "",
     "html-to-vdom ": ""
