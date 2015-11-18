@@ -13729,16 +13729,16 @@ var Krumelur = {
   vTrees: {}
 };
 
-Krumelur.initialize = function(element) {
+Krumelur.snapshot = function(element) {
   if (!element.id) { throw "Krumelur.initialize: element most have id defined"; }
   Krumelur.vTrees[element.id] = convertHTML(element.outerHTML.trim());
 };
 
-Krumelur.applyDiffFromHTMLString = function(htmlString, targetElement) {
+Krumelur.apply = function(htmlString, element) {
   var replacementVtree = convertHTML(htmlString.trim());
-  var patches = diff(Krumelur.vTrees[targetElement.id], replacementVtree);
-  targetElement = patch(targetElement, patches);
-  Krumelur.vTrees[targetElement.id] = replacementVtree;
+  var patches = diff(Krumelur.vTrees[element.id], replacementVtree);
+  element = patch(element, patches);
+  Krumelur.vTrees[element.id] = replacementVtree;
 };
 
 module.exports = global.Krumelur = Krumelur

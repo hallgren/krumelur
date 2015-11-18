@@ -19,7 +19,7 @@
                   unbindLink();
 
                   var element = document.getElementById("body");
-                  Krumelur.applyDiffFromHTMLString(xhr.responseText, element);
+                  Krumelur.apply(xhr.responseText, element);
                   
                   bindLink();
                 } else {
@@ -54,7 +54,7 @@
 
         window.onload = function(){
             var element = document.getElementById("body");
-            Krumelur.initialize(element);
+            Krumelur.snapshot(element);
             bindLink();
         };
 
