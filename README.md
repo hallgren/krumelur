@@ -1,5 +1,3 @@
-Krumelur
-
 # Development
 
 ### Setup
