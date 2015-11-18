@@ -2,9 +2,11 @@
   "name": "krumelur",
   "version": "0.0.1",
   "description": "This is a mix of Virtual-DOM, HTML-TO-VDOM, that applies DOM \"diffs\" without any server configuration—it just needs plain old HTML.",
-  "main": "./public/dist/krumelur.js",
+  "main": "./public/krumelur.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify ./src/krumelur.js -o ./public/krumelur.js",
+    "build_minified": "browserify src/krumelur.js | uglifyjs --compress --mangle > ./public/krumelur.min.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,7 @@
     "html-to-vdom ": ""
   },
   "devDependencies": {
-    "browserify": ""
+    "browserify": "^12.0.1",
+    "uglify": "^0.1.5"
   }
 }
