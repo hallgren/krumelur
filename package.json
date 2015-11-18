@@ -1,6 +1,6 @@
 {
   "name": "krumelur",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "This is a mix of Virtual-DOM, HTML-TO-VDOM, that applies DOM \"diffs\" without any server configuration—it just needs plain old HTML.",
   "main": "./public/krumelur.js",
   "scripts": {
