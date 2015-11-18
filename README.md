@@ -1,18 +1,15 @@
 # Krumelur
 
-With Krumelur it's possible to take snapshot of DOM elements, a snapshot is a virtual-dom that is stored within Krumelur. It's later possible to update the element with new HTML by applying it to the element.
+With Krumelur it's possible to update a DOM elements with new html content, it does so by using a virtual-dom to patch the element with changes from the new html and the current representation in the element.
 
 ### API
 
-`Krumelur.snapshot(element)` Store a snapshot of the element.
-
-`Krumelur.apply(html, element)` Apply html on the element by diffing the stored snapshot with the html input and update the element by patching it with the diff.
+`Krumelur.apply(html, element)`
 
 ### Example
 
 ```js
   id = document.getElementById("body")
-  Krumelur.snapshot(id)
   Krumelur.apply("<body id='body'><span>new body</span></body>",id)
 ```
 
