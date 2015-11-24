@@ -9,8 +9,8 @@ With Krumelur it's possible to update a DOM elements with new html content, it d
 ### Example
 
 ```js
-  id = document.getElementById("body")
-  Krumelur.apply("<body id='body'><span>new body</span></body>",id)
+  element = document.getElementById("body")
+  Krumelur.apply("<body id='body'><span>new body</span></body>", element)
 ```
 
 ## Development
