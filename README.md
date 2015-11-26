@@ -1,6 +1,6 @@
 # Krumelur
 
-With Krumelur it's possible to update a DOM elements with new html content, it does so by using a virtual-dom to patch the element with changes from the new html and the current representation in the element.
+With Krumelur it's possible to update a DOM elements with new html content, it does so by using a virtual-dom to patch the element with changes from the new html string.
 
 ### API
 
@@ -9,8 +9,8 @@ With Krumelur it's possible to update a DOM elements with new html content, it d
 ### Example
 
 ```js
-  id = document.getElementById("body")
-  Krumelur.apply("<body id='body'><span>new body</span></body>",id)
+  element = document.getElementById("body")
+  Krumelur.apply("<body id='body'><span>new body</span></body>", element)
 ```
 
 ## Development
