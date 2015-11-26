@@ -20,7 +20,6 @@ get "/todo" do
   if @todos.length == 0
     erb :todo_index_empty
   else
-    puts "data"
     @completed_count = completed.length
     @active_count = active.length
     @all_completed = all_completed? @todos
@@ -81,9 +80,7 @@ get "/todo/active" do
 end
 
 post "/todo/?:route?/new_todo" do
-  puts params
   add_todo({:text => params[:title], :completed => false, :id => rand(36**8).to_s(36)})
-  puts params[:route]
   if request.xhr?
     @route = params[:route]
     @todos = todos_based_on_route @route

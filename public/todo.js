@@ -1,10 +1,9 @@
 window.onload = function(){
     bind();
-
+    debugger
+    window.route = window.location.pathname.replace(/\/$/, '');
     if (history.pushState) {
-      // supported.
       bindPushStateEvent(); 
-      
     }
 };
 
