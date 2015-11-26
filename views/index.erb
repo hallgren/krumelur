@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>HTML5 Test Page</title>
-    <script src="/krumelur.min.js"></script>
+    <script src="/krumelur.min.js" async></script>
     <script type="text/javascript">
         var ajax = function(url) {
             var xhr = new XMLHttpRequest();
@@ -19,7 +19,36 @@
                   unbindLink();
 
                   var element = document.getElementById("body");
-                  Krumelur.apply(xhr.responseText, element);
+                  Krumelur.applyFromSnapshot(xhr.responseText, element);
+                  
+                  //Make the applyFromSnapshot paint before a snapshot is taken
+                  setTimeout(function(){
+                   Krumelur.snapshot(element);
+                  }, 10);
+                  
+                  bindLink();
+                } else {
+                  console.log('Error: ' + xhr.status); // An error occurred during the request.
+                }
+              }
+            };
+        };
+
+        var ajax2 = function(url) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send();
+
+            xhr.onreadystatechange = function () {
+              var DONE = 4; // readyState 4 means the request is done.
+              var OK = 200; // status 200 is a successful return.
+              if (xhr.readyState === DONE) {
+                if (xhr.status === OK) {
+                  unbindLink();
+
+                  var element = document.getElementById("body");
+                  element.innerHTML = xhr.responseText;
                   
                   bindLink();
                 } else {
@@ -45,6 +74,13 @@
             } else if (x.attachEvent) {
                 x.attachEvent("click", eventFunction);
             }
+
+            var y = document.getElementById("selflink2");
+            if (y.addEventListener) {
+                y.addEventListener("click", eventFunction2);
+            } else if (y.attachEvent) {
+                y.attachEvent("click", eventFunction2);
+            }
         };
 
         var eventFunction = function(e) {
@@ -52,8 +88,14 @@
             ajax(e.target.href);
         };
 
+        var eventFunction2 = function(e) {
+            e.preventDefault();
+            ajax2(e.target.href);
+        };
+
         window.onload = function(){
             var element = document.getElementById("body");
+            Krumelur.snapshot(element);
             bindLink();
         };
 
