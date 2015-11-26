@@ -1,0 +1,12 @@
+
+<% if @show_footer_and_toggle_all %>
+  <% if @all_completed %>
+    <form action="/todo<%= "/#{@route}" if @route %>/reactivate_all" method="post">
+    <button id="toggle-all" type="submit" class="checked">
+    </form>     
+  <% else %>
+    <form action="/todo<%= "/#{@route}" if @route %>/complete_all" method="post">
+      <button id="toggle-all" type="submit" >
+    </form>
+  <% end %>
+<% end %>

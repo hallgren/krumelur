@@ -1,0 +1,19 @@
+ <% if @show_footer_and_toggle_all %>
+    <footer id="footer">
+      <span id="todo-count"><strong><%= @active_count %></strong> item left</span>
+      <ul id="filters">
+        <li>
+          <a class="route <%= 'selected' unless @route %>" href="/todo">All</a>
+        </li>
+        <li>
+          <a class="route <%= 'selected' if @route == 'active'%>" href="/todo/active">Active</a>
+        </li>
+        <li>
+          <a class="route <%= 'selected' if @route == 'completed'%>"  href="/todo/completed">Completed</a>
+        </li>
+      </ul>
+      <form action="/todo/clear_completed" method="post">
+        <button id="clear-completed">Clear completed (<%= @completed_count %>)</button>
+      </form>
+    </footer>
+  <% end %>

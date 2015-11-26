@@ -557,9 +557,10 @@ hr {
     margin: 130px auto 40px auto;
   }
 }
-  </style>
-  <script src="/todo.js" async></script>
-  <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+
+    </style>
+    <script src="/todo.js" async></script>
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
   </head>
   <body>
     <section id="todoapp">
@@ -572,16 +573,16 @@ hr {
       <!-- This section should be hidden by default and shown when there are todos -->
       <section id="main">
         <div id="toggle_all">
-          <%= erb :toggle_all %>
+          <div></div>
         </div>
         <label for="toggle-all">Mark all as complete</label>
         <ul id="todo-list">
-          <%= erb :todos %>
+          <div></div>
         </ul>
       </section>
       <!-- This footer should hidden by default and shown when there are todos -->
       <section id="foot">
-        <%= erb :footer %>
+        <div></div>
       </section>
     </section>
     <footer id="info">
@@ -589,7 +590,7 @@ hr {
       <!-- Remove the below line ↓ -->
       <p>Template by <a href="http://github.com/sindresorhus">Sindre Sorhus</a></p>
       <!-- Change this out with your name and url ↓ -->
-      <p>Created by <a href="http://github.com/hallgren/reactize-todo">Morgan Hallgren</a></p>
+      <p>Created by <a href="http://todomvc.com">you</a></p>
       <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
     </footer>
     <!-- Scripts here. Don't remove this ↓ -->
