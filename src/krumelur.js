@@ -7,6 +7,7 @@ var convertHTML = require('html-to-vdom')({
     VNode: VNode,
     VText: VText
 });
+var parser = require('vdom-parser');
 
 var Krumelur = {
   version: "0.1.0",
@@ -15,22 +16,21 @@ var Krumelur = {
 
 Krumelur.snapshot = function(element) {
   if (!element.id) { throw "Krumelur.snapshot: element most have id defined"; }
-  var vTree = convertHTML(element.outerHTML.trim());
-  Krumelur.vTrees[element.id] = vTree;
+  Krumelur.vTrees[element.id] = parser(element);
 };
 
 Krumelur.applyFromSnapshot = function(htmlString, element) {
   if (!element.id) { throw "Krumelur.applyFromSnapshot: element most have id defined"; }
-  var replacementVtree = convertHTML(htmlString.trim());
+  var replacementVtree = parser(htmlString) ;
   var patches = diff(Krumelur.vTrees[element.id], replacementVtree);
-  element = patch(element, patches);
+  patch(element, patches);
 };
 
 Krumelur.apply = function(htmlString, element) {
   if (!element.id) { throw "Krumelur.apply: element most have id defined"; }
-  var replacementVtree = convertHTML(htmlString.trim());
-  var patches = diff(convertHTML(element.outerHTML.trim()), replacementVtree);
-  element = patch(element, patches);
+  var replacementVtree = parser(htmlString);
+  var patches = diff(parser(element), replacementVtree);
+  patch(element, patches);
 };
 
 module.exports = global.Krumelur = Krumelur

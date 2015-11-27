@@ -1,7 +1,7 @@
 {
   "name": "krumelur",
-  "version": "0.0.3",
-  "description": "This is a mix of Virtual-DOM, HTML-TO-VDOM, that applies DOM \"diffs\" without any server configuration—it just needs plain old HTML.",
+  "version": "0.1.0",
+  "description": "This is a mix of virtual-dom and vdom-parser, that applies DOM \"diffs\" without any server configuration—it just needs plain old HTML.",
   "main": "./public/krumelur.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -23,7 +23,7 @@
   "homepage": "https://github.com/hallgren/krumelur",
   "dependencies": {
     "virtual-dom": "",
-    "html-to-vdom ": ""
+    "vdom-parser": ""
   },
   "devDependencies": {
     "browserify": "^12.0.1",

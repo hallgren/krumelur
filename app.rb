@@ -13,6 +13,15 @@ get "/" do
   end
 end
 
+#Many nodes
+get "/many" do
+  if request.xhr?
+    erb :body_many_nodes
+  else
+    erb :index_many_nodes
+  end
+end
+
 #Todo
 get "/todo" do
   
