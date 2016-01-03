@@ -1,0 +1,33 @@
+{{#each todos}}
+  {{#with this}}
+  
+
+  {{#if completed }}
+    <li id="{{id}}" class="completed {{#if edit_id}}editing{{/if}}">
+      <div class="view">
+        <form action="/todo{{#if @root.route}}/{{@root.route}}{{/if}}/reactivate/{{id}}" method="post">
+          <input class="toggle" type="checkbox" checked="true" />
+          <input class="toggle" type="submit" value=""/>
+        </form>
+  {{else}}
+    <li id="{{id}}" class="{{#if edit_id}}editing{{/if}}">
+      <div class="view">
+        <form action="/todo{{#if @root.route}}/{{@root.route}}{{/if}}/complete/{{id}}" method="post">
+          <input class="toggle" type="checkbox" />
+          <input class="toggle" type="submit" value=""/>
+        </form>
+  
+  {{/if}}
+        <a href="/todo{{#if @root.route}}/{{@root.route}}{{/if}}/edit/{{id}}">
+          <label class="edit_me">{{title}}</label>
+        </a>
+        <form action="/todo{{#if @root.route}}/{{@root.route}}{{/if}}/destroy/{{id}}" method="post">
+          <button class="destroy" name="id" value="{{title}}"></button>
+        </form>
+      </div>
+      <form class="form-edit" action="/todo{{#if @root.route}}/{{@root.route}}{{/if}}/edit/{{id}}" method="post">
+        <input class="edit" type="text" name="title" value="{{title}}" />
+      </form>
+    </li>
+  {{/with}}
+{{/each}}

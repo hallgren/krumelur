@@ -1,0 +1,11 @@
+{{#if show_footer_and_toggle_all}}
+  {{#if all_completed}}
+    <form action="/todo{{#if route}}/{{route}}{{/if}}/reactivate_all" method="post">
+    <button id="toggle-all" type="submit" class="checked">
+    </form>
+  {{else}}
+     <form action="/todo{{#if route}}/{{route}}{{/if}}/complete_all" method="post">
+      <button id="toggle-all" type="submit" >
+    </form>
+  {{/if}}
+{{/if}}

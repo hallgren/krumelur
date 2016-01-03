@@ -558,30 +558,59 @@ hr {
   }
 }
   </style>
-  <script src="/todo.js" async></script>
+  <script src="/queue.js" async defer></script>
+  <script src="/todo.js" async defer></script>
+  <script src="/handlebars.min-latest.js" async defer></script>
+  <script src="/todo_offline.js" async defer></script>
+
+<!--   <script>
+    if (navigator.serviceWorker) {
+      navigator.serviceWorker.register('/sw.js').then(function(registration) {
+        // Registration was successful
+        console.log('ServiceWorker registration successful with scope: ',    registration.scope);
+      }).catch(function(err) {
+        // registration failed :(
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    }
+  </script> -->
   <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
   </head>
   <body>
     <section id="todoapp">
       <header id="header">
         <h1>todos</h1>
-        <form id="form-new_todo" action="<%= "/todo/#{@route}" if @route %>/todo/new_todo" method="post">
+        <form id="form-new_todo" action="/todo<%= "/#{@route}" if @route %>/new_todo" method="post">
           <input id="new-todo" placeholder="What needs to be done?" autofocus name="title">
         </form>
       </header>
       <!-- This section should be hidden by default and shown when there are todos -->
       <section id="main">
         <div id="toggle_all">
-          <%= erb :toggle_all %>
+          <%= #erb :toggle_all 
+            handlebars = Handlebars::Context.new
+            template = handlebars.compile(erb :toggle_all_hbr)
+            template.call(:show_footer_and_toggle_all => @show_footer_and_toggle_all, :all_completed => @all_completed, :route => @route) 
+          %>
         </div>
         <label for="toggle-all">Mark all as complete</label>
         <ul id="todo-list">
-          <%= erb :todos %>
+          
+          <%= #erb :todos
+          handlebars = Handlebars::Context.new
+          template = handlebars.compile(erb :todos_hbr)
+          template.call(:todos => @todos, :route => @route) 
+        %>
         </ul>
       </section>
       <!-- This footer should hidden by default and shown when there are todos -->
       <section id="foot">
-        <%= erb :footer %>
+        
+        <%= #erb :footer
+          handlebars = Handlebars::Context.new
+          template = handlebars.compile(erb :footer_hbr)
+          template.call(:show_footer_and_toggle_all => @show_footer_and_toggle_all, :active_count => @active_count, :route => @route, :completed_count => @completed_count, :completed => @route == 'completed', :active => @route == 'active') 
+        %>
       </section>
     </section>
     <footer id="info">
@@ -592,7 +621,23 @@ hr {
       <p>Created by <a href="http://github.com/hallgren/reactize-todo">Morgan Hallgren</a></p>
       <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
     </footer>
+    
     <!-- Scripts here. Don't remove this ↓ -->
+    <script id="todosOfflineTemplate" type="text/x-handlebars-template">
+    <%= 
+    erb :todo_hbr
+    %>
+    </script>
+    <script id="todoEditOfflineTemplate" type="text/x-handlebars-template">
+      <%= 
+      erb :todo_edit_hbr
+      %>
+    </script>
+    <script id="footerOfflineTemplate" type="text/x-handlebars-template">
+      <%= 
+      erb :todo_footer_offline_hbr
+      %>
+    </script>
   </body>
 
  

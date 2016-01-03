@@ -1,0 +1,21 @@
+
+{{#if completed }}
+  <li id="{{id}}" class="completed {{#if edit_id}}editing{{/if}}">
+    <div class="view">
+      <form></form>
+{{else}}
+  <li id="{{id}}" class="{{#if edit_id}}editing{{/if}}">
+    <div class="view">
+    <form></form>
+{{/if}}
+      <a href="{{#if route}}{{route}}{{/if}}/edit/{{id}}">
+        <label class="edit_me">{{title}}</label>
+      </a>
+      <form action="{{#if route}}{{route}}{{/if}}/destroy/{{id}}" method="post">
+        <button class="destroy" name="id" value="{{ttitleext}}"></button>
+      </form>
+    </div>
+    <form class="form-edit" action="{{#if route}}{{route}}{{/if}}/edit/{{id}}" method="post">
+      <input class="edit" type="text" name="title" value="{{title}}" />
+    </form>
+  </li>

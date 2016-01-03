@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>HTML5 Test Page</title>
-    <script src="/krumelur.min.js" async></script>
+    <script src="/krumelur.js" async></script>
     <script type="text/javascript">
         var ajax = function(url) {
             var xhr = new XMLHttpRequest();
@@ -19,12 +19,12 @@
                   unbindLink();
 
                   var element = document.getElementById("top");
-                  Krumelur.applyFromSnapshot(xhr.responseText, element);
+                  Krumelur.applyFromSnapshot(xhr.responseText, element, true);
                   
                   //Make the applyFromSnapshot paint before a snapshot is taken
-                  setTimeout(function(){
-                   Krumelur.snapshot(element);
-                  }, 10);
+                  // setTimeout(function(){
+                  //  Krumelur.snapshot(element);
+                  // }, 10);
                 //Krumelur.apply(xhr.responseText, element);
 
                   bindLink();

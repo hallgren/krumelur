@@ -1,3 +1,4 @@
+require 'handlebars'
 require "sinatra"
 enable :sessions
 enable :protection
@@ -26,8 +27,14 @@ end
 get "/todo" do
   
   @todos = todos
+  @todos.each do |todo|
+    todo[:edit_id] = false
+  end
   if @todos.length == 0
-    erb :todo_index_empty
+    handlebars = Handlebars::Context.new
+    template = handlebars.compile(erb :todo_index_empty_hbr)
+    template.call() #=> "Hey Yuh!"
+    #erb :todo_index_empty
   else
     @completed_count = completed.length
     @active_count = active.length
@@ -43,13 +50,18 @@ get "/todo/?:route?/edit/:id" do
   @route = params[:route]
   @todos = todos_based_on_route @route
 
+  @todos.each do |todo|
+    todo[:edit_id] = false
+    todo[:edit_id] = true if todo[:id] == @params[:id]
+  end
+
   if request.xhr?
     erb :todos
   else
     @completed_count = completed.length
     @active_count = active.length
     @all_completed = all_completed? @todos
-    @show_footer_and_toggle_all = todos.length > 0
+    @show_footer_and_toggle_all = @todos.length > 0
     erb :todo_index
   end
 end
@@ -89,7 +101,14 @@ get "/todo/active" do
 end
 
 post "/todo/?:route?/new_todo" do
-  add_todo({:text => params[:title], :completed => false, :id => rand(36**8).to_s(36)})
+  
+  unless params[:id].empty?
+    id = params[:id]
+  else
+    id = rand(36**8).to_s(36)
+  end
+
+  add_todo({:title => params[:title], :completed => false, :id => id})
   if request.xhr?
     @route = params[:route]
     @todos = todos_based_on_route @route
@@ -144,7 +163,7 @@ post "/todo/?:route?/reactivate/:id" do
 end
 
 post "/todo/?:route?/edit/:id" do
-  edit_todo params[:id], params[:text]
+  edit_todo params[:id], params[:title]
   if request.xhr?
     @route = params[:route]
     @todos = todos_based_on_route @route
@@ -212,7 +231,7 @@ def active
 end
 
 def todos
-  return session[:todos] unless session[:todos] == nil
+  return session[:todos].map { |t| t } unless session[:todos] == nil
   return []
   #[{:text => "not completed", :completed => false}, {:text => "completed", :completed => true}]
 end
@@ -246,9 +265,9 @@ def reactivate_todo id
   todo[:completed] = false
 end
 
-def edit_todo id, text
+def edit_todo id, title
   todo = find_todo_by_id id
-  todo[:text] = text
+  todo[:title] = title
 end
 
 def find_todo_by_id id

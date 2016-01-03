@@ -1,10 +1,15 @@
 window.onload = function(){
     bind();
-    debugger
+
     window.route = window.location.pathname.replace(/\/$/, '');
-    if (history.pushState) {
-      bindPushStateEvent(); 
+    
+    if (!navigator.serviceWorker) {
+      if (history.pushState) {
+        bindPushStateEvent(); 
+      }
     }
+
+    
 };
 
 var bindPushStateEvent = function(){
@@ -68,9 +73,11 @@ var bind = function(){
     }
 
     if (window.addEventListener) {
-        window.addEventListener("todo-list-update", updatePartials);
+      window.addEventListener("todo-list-update", updatePartials);
+      window.addEventListener("offline-sync-done", updatePartials);
     } else if (window.attachEvent) {
-        window.attachEvent("todo-list-update", updatePartials);
+      window.attachEvent("todo-list-update", updatePartials);
+      window.attachEvent("offline-sync-done", updatePartials);
     }
 
     if (window.addEventListener) {
@@ -82,26 +89,28 @@ var bind = function(){
 };
 
 var reBind = function(){
-    var new_todo_form = document.getElementById("form-new_todo");
-    if (new_todo_form.removeEventListener) {
-        new_todo_form.removeEventListener("submit", addNewTodo);
-    } else if (new_todo_form.detachEvent) {
-        new_todo_form.detachEvent("submit", addNewTodo);
-    }
+  var new_todo_form = document.getElementById("form-new_todo");
+  if (new_todo_form.removeEventListener) {
+    new_todo_form.removeEventListener("submit", addNewTodo);
+  } else if (new_todo_form.detachEvent) {
+    new_todo_form.detachEvent("submit", addNewTodo);
+  }
 
-    if (window.removeEventListener) {
-        window.removeEventListener("todo-list-update", updatePartials);
-    } else if (window.detachEvent) {
-        window.detachEvent("todo-list-update", updatePartials);
-    }
+  if (window.removeEventListener) {
+    window.removeEventListener("todo-list-update", updatePartials);
+    window.removeEventListener("offline-sync-done", updatePartials);
+  } else if (window.detachEvent) {
+    window.detachEvent("todo-list-update", updatePartials);
+    window.detachEvent("offline-sync-done", updatePartials);
+  }
 
-    if (window.removeEventListener) {
-        window.removeEventListener("new_route", updatePartials);
-    } else if (window.detachEvent) {
-        window.detachEvent("new_route", updatePartials);
-    }
-    bind();
-    bindPushStateEvent();
+  if (window.removeEventListener) {
+    window.removeEventListener("new_route", updatePartials);
+  } else if (window.detachEvent) {
+    window.detachEvent("new_route", updatePartials);
+  }
+  bind();
+  bindPushStateEvent();
 }
 
 var updatePartials = function(event) {
@@ -127,12 +136,21 @@ var updatePartials = function(event) {
 
 var addNewTodo = function(event) {
     event.preventDefault();
-    href = event.currentTarget.action
-    post(href, "title="+event.target[0].value , function(html) {
-      var customEvent = new CustomEvent('todo-list-update', {bubbles: true, cancelable: true});
-      window.dispatchEvent(customEvent);
+    var href = event.currentTarget.action;
+    var method = event.currentTarget.method;
+    var value = event.target[0].value;
+    var id = event.currentTarget.id;
+    
+    queue.push({"href": href, "method": method, "data": {"value": value}, "id": "", "onlineAction": "addNewTodo"});
+    postDataFromQueueOnline();
+    //var customEvent = new CustomEvent('post-data', {bubbles: true, cancelable: true});
+    //window.dispatchEvent(customEvent);
+
+    // post(href, "title="+event.target[0].value, function(html) {
+    //   var customEvent = new CustomEvent('todo-list-update', {bubbles: true, cancelable: true});
+    //   window.dispatchEvent(customEvent);
       
-    });
+    // });
     event.target[0].value = "";
     return false
 };
@@ -158,7 +176,7 @@ var get = function(url, callback) {
     };
 };
 
-var post = function(url, data, callback) {
+var post = function(url, data, callbackOk, callbackError) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -171,9 +189,10 @@ var post = function(url, data, callback) {
       var OK = 200; // status 200 is a successful return.
       if (xhr.readyState === DONE) {
         if (xhr.status === OK) {
-          callback(xhr.responseText);
+          callbackOk(xhr.responseText);
           reBind();
         } else {
+          callbackError(xhr.status);
           console.log('Error: ' + xhr.status); // An error occurred during the request.
         }
       }

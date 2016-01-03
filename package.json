@@ -23,7 +23,8 @@
   "homepage": "https://github.com/hallgren/krumelur",
   "dependencies": {
     "virtual-dom": "",
-    "vdom-parser": ""
+    "vdom-parser": "",
+    "handlebars": ""
   },
   "devDependencies": {
     "browserify": "^12.0.1",

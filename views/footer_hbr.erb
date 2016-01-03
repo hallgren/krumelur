@@ -1,0 +1,19 @@
+{{#if show_footer_and_toggle_all }}
+  <footer id="footer">
+    <span id="todo-count"><strong>{{ active_count }}</strong> item left</span>
+    <ul id="filters">
+      <li>
+        <a class="route {{#unless route }}selected{{/unless}}" href="/todo">All</a>
+      </li>
+      <li>
+        <a class="route {{#if active}}selected{{/if}}" href="/todo/active">Active</a>
+      </li>
+      <li>
+        <a class="route {{#if completed}}selected{{/if}}"  href="/todo/completed">Completed</a>
+      </li>
+    </ul>
+    <form action="/todo/clear_completed" method="post">
+      <button id="clear-completed">Clear completed ({{ completed_count }})</button>
+    </form>
+  </footer>
+{{/if}}
