@@ -1,3 +1,36 @@
+var editTemplate = function(id, value, route) { 
+ 
+ return `<li class="editing">
+  <div class="view">
+  </div>
+  <form class="form-edit" action="`+ route +`/edit/`+id+`" method="post">
+    <input class="edit" type="text" name="title" value="`+value+`" autofocus/>
+  </form>
+  </li>`;
+
+};
+
+var todoTemplate = function(id, value, route) {
+
+
+  return `<li id="`+id+`">
+    <div class="view">
+      <form></form>
+      <a href="`+route+`/edit/`+id+`">
+        <label class="edit_me">`+value+`</label>
+      </a>
+      <form action="`+route+`/destroy/`+id+`" method="post">
+        <button class="destroy" name="id" value="`+value+`"></button>
+      </form>
+    </div>
+    <form class="form-edit" action="`+route+`/edit/`+id+`" method="post">
+      <input class="edit" type="text" name="title" value="`+value+`" />
+    </form>
+  </li>`;
+
+};
+
+
 var addNewTodoOffline = function(event) {
   event.preventDefault();
   var href = event.currentTarget.action;
@@ -8,9 +41,7 @@ var addNewTodoOffline = function(event) {
   queue.push({"href": href, "method": method, "data": {"value": value}, "id": id});
 
   event.target[0].value = "";
-  var source = document.getElementById("todosOfflineTemplate").innerHTML;
-  var template = Handlebars.compile(source);
-  var html = template({"title": value, "route": window.route, "id": id})
+  var html = todoTemplate(id, value, window.route);
   
   var div = document.createElement('div');
   div.innerHTML = html;
@@ -44,11 +75,7 @@ var submitTodoOffline = function(event) {
       element.attachEvent("submit", submitTodoOffline);
   }
   var value = event.target[0].value;
-
-  var source = document.getElementById("todosOfflineTemplate").innerHTML;
-  var template = Handlebars.compile(source);
-  
-  var html = template({"title": value, "route": window.route, "id": id});
+  var html = todoTemplate(id, value, window.route);
 
   var div = document.createElement('div');
   div.innerHTML = html;
@@ -71,10 +98,8 @@ var clickTodoOffline = function(event) {
   var id = event.currentTarget.id;
   
   if (event.target.className == 'edit_me') {
-    var source = document.getElementById("todoEditOfflineTemplate").innerHTML;
-    var template = Handlebars.compile(source);
     var value = event.target.innerText;
-    var html = template({"title": value, "route": window.route, "id": id})
+    var html = editTemplate(id, value, window.route);
     event.currentTarget.innerHTML = html
 
     if (event.currentTarget.removeEventListener) {
@@ -120,9 +145,7 @@ window.addEventListener('offline',  function(){
 
 
   //Load offline footer
-  var source = document.getElementById("footerOfflineTemplate").innerHTML;
-  var template = Handlebars.compile(source);
-  var html = template({});
+  var html = '<footer id="footer"><span><strong>OFFLINE</strong></span></footer>';
   var footerElement = document.getElementById("foot");
   footerElement.innerHTML = html;
   

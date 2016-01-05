@@ -1,4 +1,3 @@
-require 'handlebars'
 require "sinatra"
 enable :sessions
 enable :protection

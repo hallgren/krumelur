@@ -560,7 +560,6 @@ hr {
   </style>
   <script src="/queue.js" async defer></script>
   <script src="/todo.js" async defer></script>
-  <script src="/handlebars.min-latest.js" async defer></script>
   <script src="/todo_offline.js" async defer></script>
 
 <!--   <script>
@@ -587,30 +586,16 @@ hr {
       <!-- This section should be hidden by default and shown when there are todos -->
       <section id="main">
         <div id="toggle_all">
-          <%= #erb :toggle_all 
-            handlebars = Handlebars::Context.new
-            template = handlebars.compile(erb :toggle_all_hbr)
-            template.call(:show_footer_and_toggle_all => @show_footer_and_toggle_all, :all_completed => @all_completed, :route => @route) 
-          %>
+          <%= erb :toggle_all %>
         </div>
         <label for="toggle-all">Mark all as complete</label>
         <ul id="todo-list">
-          
-          <%= #erb :todos
-          handlebars = Handlebars::Context.new
-          template = handlebars.compile(erb :todos_hbr)
-          template.call(:todos => @todos, :route => @route) 
-        %>
+          <%= erb :todos %>
         </ul>
       </section>
       <!-- This footer should hidden by default and shown when there are todos -->
       <section id="foot">
-        
-        <%= #erb :footer
-          handlebars = Handlebars::Context.new
-          template = handlebars.compile(erb :footer_hbr)
-          template.call(:show_footer_and_toggle_all => @show_footer_and_toggle_all, :active_count => @active_count, :route => @route, :completed_count => @completed_count, :completed => @route == 'completed', :active => @route == 'active') 
-        %>
+        <%= erb :footer %>
       </section>
     </section>
     <footer id="info">
@@ -623,21 +608,7 @@ hr {
     </footer>
     
     <!-- Scripts here. Don't remove this ↓ -->
-    <script id="todosOfflineTemplate" type="text/x-handlebars-template">
-    <%= 
-    erb :todo_hbr
-    %>
-    </script>
-    <script id="todoEditOfflineTemplate" type="text/x-handlebars-template">
-      <%= 
-      erb :todo_edit_hbr
-      %>
-    </script>
-    <script id="footerOfflineTemplate" type="text/x-handlebars-template">
-      <%= 
-      erb :todo_footer_offline_hbr
-      %>
-    </script>
+
   </body>
 
  
