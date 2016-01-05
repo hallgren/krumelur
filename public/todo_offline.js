@@ -224,7 +224,7 @@ window.addEventListener('online',  function(){
     post(queueItem.href, "title="+queueItem.data.value+"&id="+queueItem.id, function(html){
       // do callback when ready
       callback();
-    });
+    }, function(){ return; });
 
   };
 
