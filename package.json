@@ -22,7 +22,6 @@
   },
   "homepage": "https://github.com/hallgren/krumelur",
   "dependencies": {
-    "virtual-dom": "",
     "vdom-parser": ""
   },
   "devDependencies": {

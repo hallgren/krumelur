@@ -1,12 +1,5 @@
 var diff = require('virtual-dom/diff');
 var patch = require('virtual-dom/patch');
-
-var VNode = require('virtual-dom/vnode/vnode');
-var VText = require('virtual-dom/vnode/vtext');
-var convertHTML = require('html-to-vdom')({
-    VNode: VNode,
-    VText: VText
-});
 var parser = require('vdom-parser');
 
 var Krumelur = {
