@@ -1,6 +1,32 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
 },{}],2:[function(require,module,exports){
+(function (global){
+var topLevel = typeof global !== 'undefined' ? global :
+    typeof window !== 'undefined' ? window : {}
+var minDoc = require('min-document');
+
+if (typeof document !== 'undefined') {
+    module.exports = document;
+} else {
+    var doccy = topLevel['__GLOBAL_DOCUMENT_CACHE@4'];
+
+    if (!doccy) {
+        doccy = topLevel['__GLOBAL_DOCUMENT_CACHE@4'] = minDoc;
+    }
+
+    module.exports = doccy;
+}
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"min-document":1}],3:[function(require,module,exports){
+"use strict";
+
+module.exports = function isObject(x) {
+	return typeof x === "object" && x !== null;
+};
+
+},{}],4:[function(require,module,exports){
 
 /**
  * index.js
@@ -12,7 +38,7 @@
 
 var VNode = require('virtual-dom/vnode/vnode');
 var VText = require('virtual-dom/vnode/vtext');
-var domParser = new DOMParser();
+var domParser;
 
 var propertyMap = require('./property-map');
 var namespaceMap = require('./namespace-map');
@@ -35,11 +61,15 @@ function parser(el, attr) {
 	}
 
 	if (typeof el === 'string') {
+		if ( !('DOMParser' in window) ) {
+			throw new Error('DOMParser is not available, so parsing string to DOM node is not possible.');
+		}
+		domParser = domParser || new DOMParser();
 		var doc = domParser.parseFromString(el, 'text/html');
 
 		// most tags default to body
 		if (doc.body.firstChild) {
-			el = doc.body.firstChild;
+			el = doc.getElementsByTagName('body')[0].firstChild;
 
 		// some tags, like script and style, default to head
 		} else if (doc.head.firstChild && (doc.head.firstChild.tagName !== 'TITLE' || doc.title)) {
@@ -149,7 +179,11 @@ function createProperties(el) {
 
 	var attr;
 	for (var i = 0; i < el.attributes.length; i++) {
-		if (ns) {
+		// use built in css style parsing
+		if(el.attributes[i].name == 'style'){
+			attr = createStyleProperty(el);
+		}
+		else if (ns) {
 			attr = createPropertyNS(el.attributes[i]);
 		} else {
 			attr = createProperty(el.attributes[i]);
@@ -194,20 +228,8 @@ function createProperty(attr) {
 	} else {
 		name = attr.name;
 	}
-
-	// special cases for style attribute, we default to properties.style
-	if (name === 'style') {
-		var style = {};
-		attr.value.split(';').forEach(function (s) {
-			var pos = s.indexOf(':');
-			if (pos < 0) {
-				return;
-			}
-			style[s.substr(0, pos).trim()] = s.substr(pos + 1).trim();
-		});
-		value = style;
 	// special cases for data attribute, we default to properties.attributes.data
-	} else if (name.indexOf('data-') === 0) {
+	if (name.indexOf('data-') === 0) {
 		value = attr.value;
 		isAttr = true;
 	} else {
@@ -237,7 +259,27 @@ function createPropertyNS(attr) {
 	};
 }
 
-},{"./namespace-map":3,"./property-map":4,"virtual-dom/vnode/vnode":23,"virtual-dom/vnode/vtext":25}],3:[function(require,module,exports){
+/**
+ * Create style property from dom node
+ *
+ * @param   Object  el  DOM node
+ * @return  Object        Normalized attribute
+ */
+function createStyleProperty(el) {
+	var style = el.style;
+	var output = {};
+	for (var i = 0; i < style.length; ++i) {
+		var item = style.item(i);
+		output[item] = style[item];
+		// hack to workaround browser inconsistency with url()
+		if (output[item].indexOf('url') > -1) {
+			output[item] = output[item].replace(/\"/g, '')
+		}
+	}
+	return { name: 'style', value: output };
+}
+
+},{"./namespace-map":5,"./property-map":6,"virtual-dom/vnode/vnode":22,"virtual-dom/vnode/vtext":24}],5:[function(require,module,exports){
 
 /**
  * namespace-map.js
@@ -552,7 +594,7 @@ var namespaces = {
 
 module.exports = namespaces;
 
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 
 /**
  * property-map.js
@@ -690,53 +732,17 @@ var properties = {
 
 module.exports = properties;
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var diff = require("./vtree/diff.js")
 
 module.exports = diff
 
-},{"./vtree/diff.js":27}],6:[function(require,module,exports){
-(function (global){
-var topLevel = typeof global !== 'undefined' ? global :
-    typeof window !== 'undefined' ? window : {}
-var minDoc = require('min-document');
-
-if (typeof document !== 'undefined') {
-    module.exports = document;
-} else {
-    var doccy = topLevel['__GLOBAL_DOCUMENT_CACHE@4'];
-
-    if (!doccy) {
-        doccy = topLevel['__GLOBAL_DOCUMENT_CACHE@4'] = minDoc;
-    }
-
-    module.exports = doccy;
-}
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"min-document":1}],7:[function(require,module,exports){
-"use strict";
-
-module.exports = function isObject(x) {
-	return typeof x === "object" && x !== null;
-};
-
-},{}],8:[function(require,module,exports){
-var nativeIsArray = Array.isArray
-var toString = Object.prototype.toString
-
-module.exports = nativeIsArray || isArray
-
-function isArray(obj) {
-    return toString.call(obj) === "[object Array]"
-}
-
-},{}],9:[function(require,module,exports){
+},{"./vtree/diff.js":26}],8:[function(require,module,exports){
 var patch = require("./vdom/patch.js")
 
 module.exports = patch
 
-},{"./vdom/patch.js":14}],10:[function(require,module,exports){
+},{"./vdom/patch.js":13}],9:[function(require,module,exports){
 var isObject = require("is-object")
 var isHook = require("../vnode/is-vhook.js")
 
@@ -835,7 +841,7 @@ function getPrototype(value) {
     }
 }
 
-},{"../vnode/is-vhook.js":18,"is-object":7}],11:[function(require,module,exports){
+},{"../vnode/is-vhook.js":17,"is-object":3}],10:[function(require,module,exports){
 var document = require("global/document")
 
 var applyProperties = require("./apply-properties")
@@ -883,7 +889,7 @@ function createElement(vnode, opts) {
     return node
 }
 
-},{"../vnode/handle-thunk.js":16,"../vnode/is-vnode.js":19,"../vnode/is-vtext.js":20,"../vnode/is-widget.js":21,"./apply-properties":10,"global/document":6}],12:[function(require,module,exports){
+},{"../vnode/handle-thunk.js":15,"../vnode/is-vnode.js":18,"../vnode/is-vtext.js":19,"../vnode/is-widget.js":20,"./apply-properties":9,"global/document":2}],11:[function(require,module,exports){
 // Maps a virtual DOM tree onto a real DOM tree in an efficient manner.
 // We don't want to read all of the DOM nodes in the tree so we use
 // the in-order tree indexing to eliminate recursion down certain branches.
@@ -970,7 +976,7 @@ function ascending(a, b) {
     return a > b ? 1 : -1
 }
 
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var applyProperties = require("./apply-properties")
 
 var isWidget = require("../vnode/is-widget.js")
@@ -1123,7 +1129,7 @@ function replaceRoot(oldRoot, newRoot) {
     return newRoot;
 }
 
-},{"../vnode/is-widget.js":21,"../vnode/vpatch.js":24,"./apply-properties":10,"./update-widget":15}],14:[function(require,module,exports){
+},{"../vnode/is-widget.js":20,"../vnode/vpatch.js":23,"./apply-properties":9,"./update-widget":14}],13:[function(require,module,exports){
 var document = require("global/document")
 var isArray = require("x-is-array")
 
@@ -1205,7 +1211,7 @@ function patchIndices(patches) {
     return indices
 }
 
-},{"./create-element":11,"./dom-index":12,"./patch-op":13,"global/document":6,"x-is-array":8}],15:[function(require,module,exports){
+},{"./create-element":10,"./dom-index":11,"./patch-op":12,"global/document":2,"x-is-array":27}],14:[function(require,module,exports){
 var isWidget = require("../vnode/is-widget.js")
 
 module.exports = updateWidget
@@ -1222,7 +1228,7 @@ function updateWidget(a, b) {
     return false
 }
 
-},{"../vnode/is-widget.js":21}],16:[function(require,module,exports){
+},{"../vnode/is-widget.js":20}],15:[function(require,module,exports){
 var isVNode = require("./is-vnode")
 var isVText = require("./is-vtext")
 var isWidget = require("./is-widget")
@@ -1264,14 +1270,14 @@ function renderThunk(thunk, previous) {
     return renderedThunk
 }
 
-},{"./is-thunk":17,"./is-vnode":19,"./is-vtext":20,"./is-widget":21}],17:[function(require,module,exports){
+},{"./is-thunk":16,"./is-vnode":18,"./is-vtext":19,"./is-widget":20}],16:[function(require,module,exports){
 module.exports = isThunk
 
 function isThunk(t) {
     return t && t.type === "Thunk"
 }
 
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 module.exports = isHook
 
 function isHook(hook) {
@@ -1280,7 +1286,7 @@ function isHook(hook) {
        typeof hook.unhook === "function" && !hook.hasOwnProperty("unhook"))
 }
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = isVirtualNode
@@ -1289,7 +1295,7 @@ function isVirtualNode(x) {
     return x && x.type === "VirtualNode" && x.version === version
 }
 
-},{"./version":22}],20:[function(require,module,exports){
+},{"./version":21}],19:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = isVirtualText
@@ -1298,17 +1304,17 @@ function isVirtualText(x) {
     return x && x.type === "VirtualText" && x.version === version
 }
 
-},{"./version":22}],21:[function(require,module,exports){
+},{"./version":21}],20:[function(require,module,exports){
 module.exports = isWidget
 
 function isWidget(w) {
     return w && w.type === "Widget"
 }
 
-},{}],22:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 module.exports = "2"
 
-},{}],23:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 var version = require("./version")
 var isVNode = require("./is-vnode")
 var isWidget = require("./is-widget")
@@ -1382,7 +1388,7 @@ function VirtualNode(tagName, properties, children, key, namespace) {
 VirtualNode.prototype.version = version
 VirtualNode.prototype.type = "VirtualNode"
 
-},{"./is-thunk":17,"./is-vhook":18,"./is-vnode":19,"./is-widget":21,"./version":22}],24:[function(require,module,exports){
+},{"./is-thunk":16,"./is-vhook":17,"./is-vnode":18,"./is-widget":20,"./version":21}],23:[function(require,module,exports){
 var version = require("./version")
 
 VirtualPatch.NONE = 0
@@ -1406,7 +1412,7 @@ function VirtualPatch(type, vNode, patch) {
 VirtualPatch.prototype.version = version
 VirtualPatch.prototype.type = "VirtualPatch"
 
-},{"./version":22}],25:[function(require,module,exports){
+},{"./version":21}],24:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = VirtualText
@@ -1418,7 +1424,7 @@ function VirtualText(text) {
 VirtualText.prototype.version = version
 VirtualText.prototype.type = "VirtualText"
 
-},{"./version":22}],26:[function(require,module,exports){
+},{"./version":21}],25:[function(require,module,exports){
 var isObject = require("is-object")
 var isHook = require("../vnode/is-vhook")
 
@@ -1478,7 +1484,7 @@ function getPrototype(value) {
   }
 }
 
-},{"../vnode/is-vhook":18,"is-object":7}],27:[function(require,module,exports){
+},{"../vnode/is-vhook":17,"is-object":3}],26:[function(require,module,exports){
 var isArray = require("x-is-array")
 
 var VPatch = require("../vnode/vpatch")
@@ -1907,7 +1913,17 @@ function appendPatch(apply, patch) {
     }
 }
 
-},{"../vnode/handle-thunk":16,"../vnode/is-thunk":17,"../vnode/is-vnode":19,"../vnode/is-vtext":20,"../vnode/is-widget":21,"../vnode/vpatch":24,"./diff-props":26,"x-is-array":8}],28:[function(require,module,exports){
+},{"../vnode/handle-thunk":15,"../vnode/is-thunk":16,"../vnode/is-vnode":18,"../vnode/is-vtext":19,"../vnode/is-widget":20,"../vnode/vpatch":23,"./diff-props":25,"x-is-array":27}],27:[function(require,module,exports){
+var nativeIsArray = Array.isArray
+var toString = Object.prototype.toString
+
+module.exports = nativeIsArray || isArray
+
+function isArray(obj) {
+    return toString.call(obj) === "[object Array]"
+}
+
+},{}],28:[function(require,module,exports){
 (function (global){
 var diff = require('virtual-dom/diff');
 var patch = require('virtual-dom/patch');
@@ -1940,13 +1956,20 @@ Krumelur.applyFromSnapshot = function(htmlString, element, snapshotCallback) {
 };
 
 Krumelur.apply = function(htmlString, element) {
-  if (!element.id) { throw "Krumelur.apply: element must have id defined"; }
   var replacementVtree = parser(htmlString);
   var patches = diff(parser(element), replacementVtree);
   patch(element, patches);
 };
 
+Krumelur.applyOuter = Krumelur.apply
+
+Krumelur.applyInner = function(htmlString, element) {
+  var replacementVtree = parser(htmlString);
+  var patches = diff(parser(element.innerHTML), replacementVtree);
+  patch(element.firstElementChild, patches);
+};
+
 module.exports = global.Krumelur = Krumelur
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"vdom-parser":2,"virtual-dom/diff":5,"virtual-dom/patch":9}]},{},[28]);
+},{"vdom-parser":4,"virtual-dom/diff":7,"virtual-dom/patch":8}]},{},[28]);

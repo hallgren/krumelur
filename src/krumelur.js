@@ -29,10 +29,17 @@ Krumelur.applyFromSnapshot = function(htmlString, element, snapshotCallback) {
 };
 
 Krumelur.apply = function(htmlString, element) {
-  if (!element.id) { throw "Krumelur.apply: element must have id defined"; }
   var replacementVtree = parser(htmlString);
   var patches = diff(parser(element), replacementVtree);
   patch(element, patches);
+};
+
+Krumelur.applyOuter = Krumelur.apply
+
+Krumelur.applyInner = function(htmlString, element) {
+  var replacementVtree = parser(htmlString);
+  var patches = diff(parser(element.innerHTML), replacementVtree);
+  patch(element.firstElementChild, patches);
 };
 
 module.exports = global.Krumelur = Krumelur
