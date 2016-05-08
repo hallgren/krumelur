@@ -2,11 +2,23 @@
 
 With Krumelur it's possible to update a DOM elements with new html content, it does so by using a virtual-dom to patch the element with changes from the new html string.
 
-### API
+## API
 
 `Krumelur.apply(html, element)`
 
-### Example
+`Krumelur.applyOuter(html, element)` alias to `apply`
+
+`Krumelur.applyInner(html, element)`
+
+### apply and applyOuter
+
+Apply the html markup on the outerHTML on the element.
+
+### applyInner
+
+Apply the html markup on the innerHTML on the element. The html markup needs to be encapsulated in a tag that souround all the applied markup.
+
+## Example
 
 ```js
   element = document.getElementById("body")
@@ -15,10 +27,10 @@ With Krumelur it's possible to update a DOM elements with new html content, it d
 
 ## Development
 
-### Setup
+## Setup
 `npm install`
 
-### Build
+## Build
 `npm run build` generate public/krumelur.js
 
 `npm run build_minified` generate public/krumelur.min.js
