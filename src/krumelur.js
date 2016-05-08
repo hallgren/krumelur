@@ -39,7 +39,7 @@ Krumelur.applyOuter = Krumelur.apply
 Krumelur.applyInner = function(htmlString, element) {
   var replacementVtree = parser(htmlString);
   var patches = diff(parser(element.innerHTML), replacementVtree);
-  patch(element.firstElementChild, patches);
+  patch(element.firstElementChild || document.createElement("EMPTY"), patches);
 };
 
 module.exports = global.Krumelur = Krumelur
