@@ -1969,7 +1969,8 @@ Krumelur.applyInner = function(htmlString, element) {
 
   if (!element.firstElementChild) {
     var empty_element = document.createElement("EMPTY")
-    element.replaceChild(empty_element, element.childNodes[0]);
+    if (!element.childNodes[0]) element.appendChild(empty_element);
+    else element.replaceChild(empty_element, element.childNodes[0]);
   }
 
   patch(element.firstElementChild, patches);
