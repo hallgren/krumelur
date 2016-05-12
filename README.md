@@ -2,6 +2,8 @@
 
 With Krumelur it's possible to update a DOM elements with new html content, it does so by using a virtual-dom to patch the element with changes from the new html string.
 
+Should works on IE9 and up
+
 ## API
 
 `Krumelur.apply(html, element)`
@@ -22,7 +24,8 @@ Apply the html markup on the innerHTML on the element. The html markup needs to 
 
 ```js
   element = document.getElementById("body")
-  Krumelur.apply("<body id='body'><span>new body</span></body>", element)
+  Krumelur.apply("<body id='body'><span>Applied on body outerHTML</span></body>", element)
+  Krumelur.applyInner("<span>Applied on body innerHTML</span>", element)
 ```
 
 ## Development
