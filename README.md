@@ -1,6 +1,6 @@
 # Krumelur
 
-With Krumelur it's possible to update a DOM elements with new html content, it does so by using a virtual-dom to patch the element with changes from the new html string.
+With Krumelur it's possible to update a DOM element with new html content, it does so by using a virtual-dom to patch the element with changes from the new html string.
 
 Should works on IE9 and up
 
